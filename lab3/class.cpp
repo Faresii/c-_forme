@@ -1,64 +1,75 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <string>
+#include"header.h"
 
 using namespace std;
-#ifndef COUNTRY_H
-#define COUNTRY_H
-class Country {
-protected:
-	string name;
-	string polity;
-	float area;
-public:
-	Country();
-	Country(const string name, const string polity, const float area);
-	Country(const Country& otherObject);
 
-	//сеттеры
 
-	string SetName(const string name);
-	string SetPolity(const string polity);
-	float SetArea(const float area);
+Country::Country() : area(0.0), name("неизвестно"), polity("неизвестна") 
+{};
+Country::Country(const string name, const string polity, const float area) : name(name), polity(polity), area(area)
+{};
+Country::Country(const Country & otherObject) : name(otherObject.name), polity(otherObject.polity), area(otherObject.area)
+{};
+string Country::SetName(const string name) {
+	this->name = name;
+	return name;
+}
 
-	//геттеры
+string Country::SetPolity(const string polity) {
+	this->polity = polity;
+	return polity;
+}
 
-	string GetName();
-	string GetPolity();
-	float GetArea();
+float Country::SetArea(const float area) {
+	this->area = area;
+	return area;
+}
 
-	//методы
+float Country::GetArea() {
+	return this->area;
+}
 
-	void Print();
+string Country::GetName() {
+	return this->name;
+}
+
+string Country::GetPolity() {
+	return this->polity;
+}
+
+void Country::Print() {
+	cout << "Название страны : " << GetName() << endl;
+	cout << "Государственный строй : " << GetPolity() << endl;
+	cout << "Площадь : " << GetArea() << endl;
+}
+
+Republic::Republic() : Country() {
+	polity = "Республика";
+	party = "Неизвестна";
+}
+
+Republic::Republic(const string name, const float area) : Country(name, "Республика", area) {};
+
+
+Monarchy::Monarchy() : Country() {
+	polity = "Монархия";
+}
+
+Monarchy::Monarchy(const string name, const float area) : Country(name, "Монархия", area)
+{}
+
+Monarchy::Monarchy(const Monarchy& otherObject) : Country(otherObject) 
+{}
+
+Kingdom::Kingdom() : Country() 
+{}
+
+Kingdom::Kingdom(const string name, const float area) : Country(name, "Королевство", area )
+{}
+
+Kingdom::Kingdom(const Kingdom& otherObject) : Country(otherObject) {}
+string Kingdom::SetLeader(const string leader) {
+	cin >> this->leader;
+	return this->leader;
 };
-
-class Republic : public Country {
-private:
-	string party;
-public:
-	Republic();
-	Republic(const string name, const float area);
-
-};
-
-class Monarchy : public Country {
-private:
-	string dynasty;
-public:
-	Monarchy();
-	Monarchy(const string name, const float area);
-	Monarchy(const Monarchy& otherObject);
-};
-
-class Kingdom : public Country {
-private:
-	string leader;
-public:
-	Kingdom();
-	Kingdom(const string name, const float area);
-	Kingdom(const Kingdom& otherObject);
-	string SetLeader(const string leader);
-
-
-};
-#endif
