@@ -1,0 +1,222 @@
+#include <iostream>
+//#include <vector>    оказывается нельзя использывать в этой лабе
+#include <type_traits>
+#include <typeinfo>
+
+
+using namespace std;
+
+template <class T>
+
+
+class dynamic_array
+{
+ private:
+    int m_size; // размер массива (количество элементов в массиве, доступных пользователю).
+    int m_capacity; // "вместимость" массива, то есть размер выделенной памяти для хранения элементов
+    T * m_data; // указатель на область памяти, где хранятся сами элементы массива
+
+ public:
+    dynamic_array()
+    {
+        m_size = 0;
+        m_capacity = 0;
+        m_data = NULL;
+    }
+
+    dynamic_array(const dynamic_array<T> & a)
+    {
+        m_size = a.m_size;
+        m_capacity = m_size;
+        m_data = NULL;
+        if (m_size != 0)
+            m_data = new T[m_size];
+        else
+            m_data = 0;
+        for (int i = 0; i < m_size; ++i)
+            m_data[i] = a.m_data[i];
+    }
+
+    dynamic_array(int size)
+    {
+        m_size = size;
+        m_capacity = size;
+        if (size != 0)
+            m_data = new T[size];
+        else
+            m_data = 0;
+    }
+
+    ~dynamic_array()
+    {
+        if (m_data)
+            delete[] m_data;
+    }
+
+    int resize(int size)
+    {
+        if (size > m_capacity)
+        {
+            int new_capacity = max(size, m_size * 2);
+            T * new_data = new T[new_capacity];
+            for (int i = 0; i < m_size; ++i)
+                new_data[i] = m_data[i];
+            delete[] m_data;
+            m_data = new_data;
+            m_capacity = new_capacity;
+        }
+        
+        m_size = size;
+    }
+
+    void operator / (T val) // условие задачи № 1
+    {
+        resize(m_size + 1);
+        m_data[m_size - 1] = val;
+    }
+
+        void operator - (T val) // условие задачи № 2
+    {
+        for(int i = m_size; i > 0;i--) {
+            if(m_data[i] == val) {
+            cout << " Индекс последнего числа, которое мы ищим : "  << i << endl;
+            break;
+            }
+            }
+    }
+
+
+    int size() const
+    {
+        return m_size;
+    }
+
+    T & operator[] (int i)
+    {
+        return m_data[i];
+    }
+
+ 
+    
+    bool check_templ(){ // bool условие № 3
+
+    if (m_size == 0) {
+        cout << "Пустой массив" << endl;
+        return 0;
+        }
+
+    if (m_size > 0) {
+        return 1;
+        }
+    
+    }
+
+};
+
+template<typename T> // чтобы я ввесл сразу свой массив
+ostream & operator << (ostream & out, dynamic_array<T> a)
+{
+    for (int i = 0; i < a.size(); i++)
+        out << a[i] << " ";
+    return out;
+}
+
+
+
+
+int main() {
+   setlocale(LC_ALL, "rus");
+   
+    
+    int n = 5;
+    int  a, k= 0;
+
+    while (1){
+    cout << "Ввеите размер массива" << endl;
+    cin >> n;
+
+    dynamic_array <int> arr (n);
+
+
+    if(arr.check_templ() == 1) {
+        cout << "ВСЕ НОРМАЛЬНО, МАССИВ НЕ ПУСТОЙ" << endl;
+        
+    }
+
+    else {
+        cout << "Введите массив по новой " << endl;
+        continue;
+    }
+
+    cout << "1) Ввести массив от руки до n размера 2) Рандомные знаения в массив размером n" << endl;
+    cin >> k;
+    
+    cout << "ВСЕ ЭЛЕМЕНТЫ НЕ ДОЛЖНЫ ПРЕВЫШАТЬ 100 или -100" << endl;
+    
+    if(k == 1) for (int i = 0; i < arr.size(); i++)
+    {
+        
+        cin >> a;
+
+        if (a > 99 || a < -99) {
+            cout << " НЕКОРРЕКТНЫЙ ВВОД ПОЭТОМУ " << i + 1 << " элемент = 0" << endl;
+            arr[i] = 0;
+            continue;
+        }
+
+        arr[i] = a;
+    }
+
+    if(k == 2){
+    for (int i = 0; i < arr.size(); i++)  arr[i] = rand() % 100; // вводим рандомные значения 
+    }
+
+    cout << "Полученный массив" << endl;
+    cout << arr << endl;
+
+    
+  for (int i = 0; i < arr.size(); i++){
+    if(arr[i] > 9|| arr[i] < -9) cout << " "<< typeid(arr[i]).name()  << " "; // проверка типа данных 
+    else  cout  << typeid(arr[i]).name()  << " "; 
+  }
+   
+   // std::cout << std::is_pointer_v<int*> << std::endl;   
+
+
+    while(1){
+    
+    cout << "\nВведите какое условие задачи должно выполниться 1) Operator / 2) Operator- 3) Прекратить выполнять условия" << endl;
+    cin >> k;
+
+    if ( k == 1) {
+    cout << " Введите число которое хотите добавить в массив" << endl;
+    cin >> a;
+
+   arr.operator / (a); // оператор добавления элемента
+   cout << "Выведем полученный массив" << endl;
+   cout << arr << endl; // вывод всего массива
+
+    }
+
+    if ( k == 2) {
+    cout << endl << "Условие задачи №2" << endl;
+    cout << " Введите число которое хотите найти в массиве" << endl;
+    cin >> a;
+
+    arr.operator-(a);
+    }
+
+    if ( k == 3) break;
+
+    else continue;
+
+    }
+    cout << "1) Если хотите повторить (ПРИ ЛЮБОМ ДРУГОМ СИМВОЛЕ ВЫХОД ИЗ ПРОГРАММЫ)" << endl;
+    cin >> k;
+
+    if(k == 1) continue;
+    else break;
+}
+    system("pause");
+    return 0;
+}
