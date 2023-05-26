@@ -31,13 +31,15 @@ int main() {
 	cout << "Условие 5 : Используя подходящий алгоритм, нахождение в контейнере элемента, удовлетворяющего заданному условию " << endl;
 	cout << "Условие 6 : Создание третьего контейнера путем слияния первых двух" << endl;
 
+
+	int k = 0;
 	while (1) {
 		int a = 0;
 
 		cout << endl << "Введите условие : " << endl;
 		cin >> a;
 
-		
+
 
 		// Условие № 1
 		if (a == 1) {
@@ -103,7 +105,7 @@ int main() {
 			{
 				cout << it->first << " " << it->second << endl;
 			}
-
+			
 			continue;
 		}
 
@@ -130,21 +132,33 @@ int main() {
 			continue;
 		}
 
+		
 		// Условие № 5
-		if (a == 5) {
+		if (a == 5  ) {
 			cout << "\nУСЛОВИЕ № 5" << endl;
-			 
-			for (auto pos = mp.begin(); pos != mp.end(); pos++) {
-				if (item == pos) {
-					mp1.insert(pair<string, string>(item->first, item->second));
+			if (k != 1) {
+			cout << "Поместим 2 новых ключа с значениями в новый контейнер" << endl;
+			
+				for (int i = 0; i < 2; i++) {
+					cout << "Введите ключ и значение №" << i + 1 << " : " << endl;
+					string s, s1;
+					cin >> s;
+					cin >> s1;
+
+					mp1.insert(pair<string, string>(s, s1));
+
+
 				}
 
+				cout << endl << "Выведем контейнер" << endl;
+				for (it = mp1.begin(); it != mp1.end(); it++)
+				{
+					cout << it->first << " " << it->second << endl;
+				}
+				k++;
 			}
 
-			for (it = mp1.begin(); it != mp1.end(); it++)
-			{
-				cout << it->first << " " << it->second << endl;
-			}
+			else cout << "МЫ УЖЕ ИСПОЛЬЗОВАЛИ ЭТО УСЛОВИЕ" << endl;
 
 			continue;
 		}
